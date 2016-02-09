@@ -49,6 +49,10 @@ class neutron::agents::lbaas (
   $package_ensure         = present,
   $enabled                = true,
   $manage_service         = true,
+  $lbaas_agent_package    = $::neutron::params::lbaas_agent_package,
+  $lbaasv2_agent_package  = $::neutron::params::lbaasv2_agent_package,
+  $lbaas_agent_service    = $::neutron::params::lbaas_agent_service,
+  $lbaasv2_agent_service  = $::neutron::params::lbaasv2_agent_service,
   $debug                  = $::os_service_default,
   $interface_driver       = 'neutron.agent.linux.interface.OVSInterfaceDriver',
   $device_driver          = 'neutron_lbaas.services.loadbalancer.drivers.haproxy.namespace_driver.HaproxyNSDriver',
@@ -95,13 +99,13 @@ class neutron::agents::lbaas (
   Package['neutron'] -> Package['neutron-lbaas-agent']
   ensure_resource( 'package', 'neutron-lbaas-agent', {
     ensure => $package_ensure,
-    name   => $::neutron::params::lbaas_agent_package,
+    name   => $lbaas_agent_package,
     tag    => ['openstack', 'neutron-package'],
   })
   if $::osfamily == 'Debian' {
     ensure_packages(['neutron-lbaasv2-package'], {
       ensure => $package_ensure,
-      name   => $::neutron::params::lbaasv2_agent_package,
+      name   => $lbaasv2_agent_package,
       tag    => ['openstack', 'neutron-package'],
     })
     Package['neutron'] -> Package['neutron-lbaasv2-package']
@@ -121,14 +125,14 @@ class neutron::agents::lbaas (
 
   service { 'neutron-lbaas-service':
     ensure => $service_v1_ensure,
-    name   => $::neutron::params::lbaas_agent_service,
+    name   => $lbaas_agent_service,
     enable => $enable_v1,
     tag    => 'neutron-service',
   }
 
   service { 'neutron-lbaasv2-service':
     ensure => $service_v2_ensure,
-    name   => $::neutron::params::lbaasv2_agent_service,
+    name   => $lbaasv2_agent_service,
     enable => $enable_v2,
     tag    => 'neutron-service',
   }

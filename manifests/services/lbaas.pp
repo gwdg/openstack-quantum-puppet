@@ -50,6 +50,7 @@ class neutron::services::lbaas (
   $service_providers           = $::os_service_default,
   # DEPRECATED
   $package_ensure              = false,
+  $lbaas_agent_package         = $::neutron::params::lbaas_agent_package
 ) {
 
   include ::neutron::deps
@@ -70,7 +71,7 @@ class neutron::services::lbaas (
     # agent package contains both agent and service resources
     ensure_resource( 'package', 'neutron-lbaas-agent', {
       ensure => $package_ensure,
-      name   => $::neutron::params::lbaas_agent_package,
+      name   => $lbaas_agent_package,
       tag    => ['openstack', 'neutron-package'],
     })
   }
