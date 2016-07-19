@@ -73,7 +73,14 @@ describe 'basic neutron' do
       class { '::neutron::agents::ml2::ovs':
         enable_tunneling => true,
         local_ip         => '127.0.0.1',
-        tunnel_types => ['vxlan'],
+        tunnel_types     => ['vxlan'],
+        # Prior to Newton, the neutron-openvswitch-agent used 'ovs-ofctl' of_interface driver by default.
+        # In Newton, 'of_interface' defaults to 'native'.
+        # This mostly eliminates spawning ovs-ofctl and improves performance a little.
+        # Current openstack-selinux does not allow the Ryu controller to listen on 6633 port.
+        # So in the meantime, let's use old interface:
+        of_interface     => 'ovs-ofctl',
+        ovsdb_interface  => 'vsctl',
       }
       class { '::neutron::agents::ml2::sriov': }
       class { '::neutron::services::lbaas::haproxy': }
