@@ -158,7 +158,7 @@ class neutron::plugins::midonet (
     Package<| title == 'python-networking-midonet' |>     ~> Exec['midonet-db-sync']
     Package<| title == 'python-networking-midonet-ext' |> ~> Exec['midonet-db-sync']
     exec { 'midonet-db-sync':
-      command     => 'neutron-db-manage --subproject networking-midonet upgrade head',
+      command     => 'neutron-db-manage --subproject networking-midonet upgrade heads',
       path        => '/usr/bin',
       subscribe   => [
         Anchor['neutron::install::end'],
