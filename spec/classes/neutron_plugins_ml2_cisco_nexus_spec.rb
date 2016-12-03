@@ -10,7 +10,7 @@ describe 'neutron::plugins::ml2::cisco::nexus' do
     "class { 'neutron::server': password => 'password'}
      class { 'neutron':
       rabbit_password => 'passw0rd',
-      core_plugin     => 'neutron.plugins.ml2.plugin.Ml2Plugin' }"
+      core_plugin     => 'ml2' }"
   end
 
   let :default_params do
